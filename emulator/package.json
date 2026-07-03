@@ -1,0 +1,19 @@
+{
+  "name": "gba-emulator",
+  "version": "1.0.0",
+  "description": "Professional GBA Emulator with pre-loaded ROM",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder",
+    "pack": "electron-builder --dir"
+  },
+  "dependencies": {
+    "electron": "^latest",
+    "electron-builder": "^latest"
+  },
+  "devDependencies": {
+    "electron-prebuilt": "^latest"
+  }
+}
