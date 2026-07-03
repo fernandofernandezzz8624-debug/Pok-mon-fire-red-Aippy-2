@@ -7,7 +7,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="GBA FireRed">
     <meta name="theme-color" content="#000000">
-    <meta name="mobile-web-app-capable" content="yes">
     <title>Pokémon FireRed - GBA Emulator</title>
     <style>
         * {
@@ -67,7 +66,28 @@
             font-size: 13px;
         }
 
-        /* Pantalla principal */
+        .battery-indicator {
+            display: inline-block;
+            width: 20px;
+            height: 12px;
+            border: 1px solid #666;
+            border-radius: 2px;
+            position: relative;
+            background: linear-gradient(90deg, #4ecdc4 100%, #1a1a1a 0%);
+        }
+
+        .battery-indicator::after {
+            content: '';
+            position: absolute;
+            right: -3px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 2px;
+            height: 4px;
+            background: #666;
+            border-radius: 1px;
+        }
+
         .game-screen {
             flex: 1;
             display: flex;
@@ -96,7 +116,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.95);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -127,7 +147,6 @@
             font-size: 14px;
         }
 
-        /* Controles */
         .controls-bar {
             background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1e 100%);
             padding: 10px;
@@ -141,7 +160,6 @@
             min-height: 140px;
         }
 
-        /* D-Pad */
         .dpad-container {
             display: flex;
             flex-direction: column;
@@ -170,8 +188,6 @@
             cursor: pointer;
             active: pointer;
             touch-action: manipulation;
-            -webkit-user-select: none;
-            user-select: none;
         }
 
         .dpad-btn:active {
@@ -186,7 +202,6 @@
             visibility: hidden;
         }
 
-        /* Botones de acción (A, B) */
         .action-btns {
             display: flex;
             flex-direction: column;
@@ -229,7 +244,6 @@
             box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6);
         }
 
-        /* Botones L/R y Select/Start */
         .shoulder-btns {
             display: flex;
             gap: 8px;
@@ -284,7 +298,6 @@
             transform: scale(0.95);
         }
 
-        /* Menú flotante */
         .menu-button {
             position: fixed;
             bottom: 10px;
@@ -309,7 +322,6 @@
             transform: scale(0.95);
         }
 
-        /* Modal */
         .modal {
             position: fixed;
             top: 0;
@@ -441,44 +453,6 @@
             border: none;
         }
 
-        .rom-loader {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        #romFile {
-            display: none;
-        }
-
-        .file-input-label {
-            display: block;
-            padding: 12px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 6px;
-            text-align: center;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 13px;
-            color: #fff;
-        }
-
-        .load-rom-btn {
-            padding: 12px;
-            background: linear-gradient(135deg, #4ecdc4, #45b7b0);
-            border: none;
-            border-radius: 6px;
-            color: #fff;
-            font-weight: bold;
-            font-size: 13px;
-            cursor: pointer;
-            active: pointer;
-        }
-
-        .load-rom-btn:active {
-            transform: scale(0.95);
-        }
-
         .reset-btn {
             padding: 12px;
             background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
@@ -496,13 +470,16 @@
             transform: scale(0.95);
         }
 
-        .rom-note {
-            font-size: 11px;
-            color: #999;
-            text-align: center;
+        .info-text {
+            padding: 12px;
+            background: rgba(102, 126, 234, 0.1);
+            border-left: 3px solid #667eea;
+            border-radius: 3px;
+            font-size: 12px;
+            color: #ccc;
+            line-height: 1.5;
         }
 
-        /* Optimización para iOS */
         @supports (padding: max(0px)) {
             body {
                 padding-top: max(0px, env(safe-area-inset-top));
@@ -517,7 +494,6 @@
             }
         }
 
-        /* Orientación horizontal */
         @media (orientation: landscape) {
             .status-bar {
                 padding: 5px 10px;
@@ -555,7 +531,6 @@
     </style>
 </head>
 <body>
-    <!-- Status Bar -->
     <div class="status-bar">
         <div class="status-left">
             <span class="game-title">🎮 Pokémon FireRed</span>
@@ -563,10 +538,10 @@
         </div>
         <div class="status-right">
             <span id="fpsText">60 FPS</span>
+            <div class="battery-indicator"></div>
         </div>
     </div>
 
-    <!-- Game Screen -->
     <div class="game-screen">
         <canvas id="gbaScreen" width="240" height="160"></canvas>
         <div class="loading-overlay" id="loadingOverlay">
@@ -575,9 +550,7 @@
         </div>
     </div>
 
-    <!-- Controls Bar -->
     <div class="controls-bar">
-        <!-- D-Pad -->
         <div class="dpad-container">
             <div class="dpad-row">
                 <div class="dpad-spacer"></div>
@@ -596,13 +569,11 @@
             </div>
         </div>
 
-        <!-- Botones de acción -->
         <div class="action-btns">
             <button class="btn-action btn-b" id="btn-b" data-key="z">B</button>
             <button class="btn-action btn-a" id="btn-a" data-key="x">A</button>
         </div>
 
-        <!-- Botones secundarios -->
         <div>
             <div class="shoulder-btns">
                 <button class="shoulder-btn" id="btn-l" data-key="q">L</button>
@@ -615,36 +586,40 @@
         </div>
     </div>
 
-    <!-- Menu Button -->
     <button class="menu-button" id="menuBtn">⚙️</button>
 
-    <!-- Modal Menu -->
     <div class="modal" id="menuModal">
         <div class="modal-header">
-            <span class="modal-title">Menú</span>
+            <span class="modal-title">Configuración</span>
             <button class="close-btn" id="closeMenuBtn">✕</button>
         </div>
         <div class="modal-content">
-            <!-- Info Section -->
             <div class="modal-section">
-                <h3>Información</h3>
+                <h3>Juego</h3>
                 <div class="info-item">
-                    <span class="info-label">ROM:</span>
-                    <span class="info-value" id="romInfo">Pokémon FireRed</span>
+                    <span class="info-label">Título:</span>
+                    <span class="info-value">Pokémon FireRed</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Región:</span>
+                    <span class="info-value">USA</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Versión:</span>
+                    <span class="info-value">1.0</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">FPS:</span>
+                    <span class="info-value" id="frameInfo">60</span>
                 </div>
                 <div class="info-item">
                     <span class="info-label">Estado:</span>
                     <span class="info-value" id="stateInfo">Ejecutando</span>
                 </div>
-                <div class="info-item">
-                    <span class="info-label">Frames:</span>
-                    <span class="info-value" id="frameInfo">0</span>
-                </div>
             </div>
 
-            <!-- Controles Section -->
             <div class="modal-section">
-                <h3>Controles</h3>
+                <h3>Controles de Emulación</h3>
                 <div class="control-item">
                     <label class="control-label">
                         <span>Velocidad:</span>
@@ -661,7 +636,7 @@
                 <div class="control-item">
                     <label class="control-label">
                         <input type="checkbox" id="vibrationToggle" checked>
-                        <span>Vibración</span>
+                        <span>Vibración Táctil</span>
                     </label>
                 </div>
                 <div class="control-item">
@@ -673,20 +648,26 @@
                 </div>
             </div>
 
-            <!-- ROM Section -->
             <div class="modal-section">
-                <h3>Cargar ROM</h3>
-                <div class="rom-loader">
-                    <input type="file" id="romFile" accept=".gba,.bin,.rom">
-                    <label for="romFile" class="file-input-label">📁 Seleccionar Archivo</label>
-                    <button class="load-rom-btn" id="loadRomBtn">Cargar ROM</button>
-                    <p class="rom-note">Formato: .gba, .bin, .rom</p>
+                <h3>Información</h3>
+                <div class="info-text">
+                    <strong>🎮 Emulador GBA Pokémon FireRed</strong><br><br>
+                    <strong>Controles de Teclado:</strong><br>
+                    • ⬆️⬇️⬅️➡️ Movimiento<br>
+                    • Z - Botón B<br>
+                    • X - Botón A<br>
+                    • Q - Botón L<br>
+                    • W - Botón R<br>
+                    • Enter - Select<br>
+                    • Espacio - Start<br><br>
+                    <strong>Dispositivo:</strong><br>
+                    Game Boy Advance<br>
+                    Juego: Pokémon FireRed (USA)
                 </div>
             </div>
 
-            <!-- Actions Section -->
             <div class="modal-section">
-                <button class="reset-btn" id="resetBtn">Reiniciar Juego</button>
+                <button class="reset-btn" id="resetBtn">🔄 Reiniciar Juego</button>
             </div>
         </div>
     </div>
@@ -716,7 +697,7 @@
                 this.initializeControls();
                 this.initializeTouchControls();
                 this.initializeSettings();
-                this.loadDefaultRom();
+                this.loadRom();
                 this.startFpsMonitor();
                 this.preventZoom();
             }
@@ -735,10 +716,6 @@
 
                 document.getElementById('closeMenuBtn').addEventListener('click', () => {
                     document.getElementById('menuModal').classList.remove('active');
-                });
-
-                document.getElementById('loadRomBtn').addEventListener('click', () => {
-                    this.loadRomFile();
                 });
 
                 document.getElementById('resetBtn').addEventListener('click', () => {
@@ -821,33 +798,12 @@
                 });
             }
 
-            loadRomFile() {
-                const fileInput = document.getElementById('romFile');
-                const file = fileInput.files[0];
-
-                if (!file) {
-                    this.updateStatus('Selecciona un archivo');
-                    return;
-                }
-
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    this.rom = new Uint8Array(e.target.result);
-                    for (let i = 0; i < Math.min(this.rom.length, 0x8000000); i++) {
-                        this.memory[0x08000000 + i] = this.rom[i];
-                    }
-
-                    document.getElementById('romInfo').textContent = file.name;
-                    this.pc = 0x08000000;
-                    this.startEmulation();
-                    document.getElementById('menuModal').classList.remove('active');
-                };
-                reader.readAsArrayBuffer(file);
-            }
-
-            loadDefaultRom() {
+            loadRom() {
                 fetch('Pokemon - FireRed Version (USA).gba')
-                    .then(response => response.arrayBuffer())
+                    .then(response => {
+                        if (!response.ok) throw new Error('ROM no encontrada');
+                        return response.arrayBuffer();
+                    })
                     .then(arrayBuffer => {
                         this.rom = new Uint8Array(arrayBuffer);
                         for (let i = 0; i < Math.min(this.rom.length, 0x8000000); i++) {
@@ -856,17 +812,18 @@
                         this.pc = 0x08000000;
                         this.startEmulation();
                         document.getElementById('loadingOverlay').classList.add('hidden');
+                        this.updateStatus('Jugando');
                     })
-                    .catch(() => {
-                        document.getElementById('statusText').textContent = 'Carga una ROM';
+                    .catch((error) => {
                         document.getElementById('loadingOverlay').classList.add('hidden');
+                        this.updateStatus('ROM no disponible');
+                        console.error('Error:', error);
                     });
             }
 
             startEmulation() {
                 if (this.isRunning) return;
                 this.isRunning = true;
-                this.updateStatus('Jugando');
                 this.emulate();
             }
 
