@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GBA Emulator - Professional Edition</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="container">
+    <header>
+      <h1>GBA Emulator - Professional Edition</h1>
+      <div class="status-bar">
+        <span id="status">Loading...</span>
+        <span id="fps">FPS: 60</span>
+      </div>
+    </header>
+
+    <main>
+      <div id="emulator-wrapper">
+        <canvas id="screen" width="240" height="160"></canvas>
+        <div id="info-panel">
+          <h3>Game Information</h3>
+          <p id="game-title">Loading game...</p>
+          <p id="game-status">Status: Initializing</p>
+        </div>
+      </div>
+
+      <div id="controls-panel">
+        <h3>Controls</h3>
+        <div class="button-grid">
+          <button id="btn-reset">Reset</button>
+          <button id="btn-pause">Pause</button>
+          <button id="btn-save">Save State</button>
+          <button id="btn-load">Load State</button>
+          <button id="btn-fullscreen">Fullscreen</button>
+        </div>
+        <div id="keyboard-info">
+          <h4>Keyboard Controls:</h4>
+          <ul>
+            <li><strong>Arrow Keys</strong> - D-Pad</li>
+            <li><strong>Z</strong> - A Button</li>
+            <li><strong>X</strong> - B Button</li>
+            <li><strong>A</strong> - L Button</li>
+            <li><strong>S</strong> - R Button</li>
+            <li><strong>Enter</strong> - Start</li>
+            <li><strong>Shift</strong> - Select</li>
+          </ul>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="emulator.js"></script>
+  <script src="render.js"></script>
+</body>
+</html>
