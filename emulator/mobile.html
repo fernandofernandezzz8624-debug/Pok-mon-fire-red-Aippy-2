@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#667eea">
+  <title>GBA Emulator Mobile</title>
+  <link rel="stylesheet" href="mobile-styles.css">
+</head>
+<body>
+  <div id="container">
+    <header>
+      <h1>GBA Emulator</h1>
+      <div class="status-bar">
+        <span id="status">Loading...</span>
+        <span id="fps">60 FPS</span>
+      </div>
+    </header>
+
+    <main>
+      <div id="emulator-wrapper">
+        <canvas id="screen" width="240" height="160"></canvas>
+      </div>
+
+      <div id="info-panel">
+        <p id="game-title">Game Loaded</p>
+        <p id="game-status">Ready to play</p>
+      </div>
+
+      <!-- Touch Controls D-Pad -->
+      <div id="dpad-container" class="controls-container">
+        <div id="dpad" class="dpad">
+          <button id="btn-up" class="dpad-btn dpad-up" data-key="up">▲</button>
+          <button id="btn-left" class="dpad-btn dpad-left" data-key="left">◀</button>
+          <button id="btn-right" class="dpad-btn dpad-right" data-key="right">▶</button>
+          <button id="btn-down" class="dpad-btn dpad-down" data-key="down">▼</button>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div id="action-buttons" class="controls-container">
+        <button id="btn-b" class="action-btn btn-b">B</button>
+        <button id="btn-a" class="action-btn btn-a">A</button>
+      </div>
+
+      <!-- Shoulder Buttons -->
+      <div id="shoulder-buttons" class="shoulder-container">
+        <button id="btn-l" class="shoulder-btn">L</button>
+        <button id="btn-r" class="shoulder-btn">R</button>
+      </div>
+
+      <!-- Control Panel -->
+      <div id="control-panel" class="control-panel">
+        <button id="btn-select" class="control-btn">SELECT</button>
+        <button id="btn-start" class="control-btn">START</button>
+      </div>
+
+      <!-- Menu Buttons -->
+      <div id="menu-buttons" class="menu-buttons">
+        <button id="btn-menu" class="menu-btn">☰ Menu</button>
+        <button id="btn-fullscreen" class="menu-btn">⛶ Full</button>
+      </div>
+    </main>
+
+    <!-- Menu Modal -->
+    <div id="menu-modal" class="modal hidden">
+      <div class="modal-content">
+        <h2>Game Menu</h2>
+        <button id="menu-reset" class="menu-item">↻ Reset</button>
+        <button id="menu-pause" class="menu-item">⏸ Pause</button>
+        <button id="menu-save" class="menu-item">💾 Save</button>
+        <button id="menu-load" class="menu-item">📂 Load</button>
+        <button id="menu-close" class="menu-item menu-close">✕ Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="emulator.js"></script>
+  <script src="mobile-render.js"></script>
+</body>
+</html>
